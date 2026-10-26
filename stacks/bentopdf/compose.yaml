@@ -1,0 +1,11 @@
+# BentoPDF: every PDF tool you'd want, run in your browser (the server only hands out the page).
+services:
+  bentopdf:
+    image: ghcr.io/alam00000/bentopdf-simple:latest
+    container_name: bentopdf
+    restart: unless-stopped
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

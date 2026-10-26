@@ -1,11 +1,11 @@
 # Each tile: href is where clicking goes, container shows running/stopped.
 - Tools:
-    - Stirling PDF:
-        icon: stirling-pdf.png
+    - BentoPDF:
+        icon: bentopdf.png
         href: https://pdf.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: edit, merge, split, convert PDFs
         server: local
-        container: stirling-pdf
+        container: bentopdf
     - Transmute:
         icon: mdi-swap-horizontal
         href: https://convert.{{HOMEPAGE_VAR_LAB_DOMAIN}}

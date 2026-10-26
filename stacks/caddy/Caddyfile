@@ -26,7 +26,7 @@ dockge.{$LAB_DOMAIN} {
 }
 
 pdf.{$LAB_DOMAIN} {
-	reverse_proxy stirling-pdf:8080
+	reverse_proxy bentopdf:8080
 }
 
 convert.{$LAB_DOMAIN} {

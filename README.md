@@ -58,7 +58,7 @@ links, goes through Tailscale Funnel and keeps its login page).
 | `logs.lab` | Dozzle: live logs for every app |
 | `top.lab` | Glances: btop in the browser |
 | `stats.lab` | Beszel: CPU, RAM, temps |
-| `pdf.lab` | Stirling PDF |
+| `pdf.lab` | BentoPDF: edit, merge, split, sign PDFs |
 | `convert.lab` | Transmute (file converter) |
 | `search.lab` | SearXNG |
 | `changes.lab` | changedetection.io |
@@ -90,7 +90,7 @@ install.sh       sets up a server from scratch
 dockge/          the app manager
 stacks/          one folder per app, and Dockge shows each one
   dns/           answers *.lab with this server's Tailscale IP
-  caddy/         sends pdf.lab to Stirling PDF, etc. (edit Caddyfile)
+  caddy/         sends pdf.lab to BentoPDF, etc. (edit Caddyfile)
   homepage/      the dashboard (edit config/services.yaml)
   ...
 system/          server settings files that install.sh copies into /etc
