@@ -92,12 +92,6 @@ keep.{$LAB_DOMAIN} {
 	reverse_proxy readeck:8000
 }
 
-ntfy.{$LAB_DOMAIN} {
-	# no login screen: signed in with the token install.sh made (NTFY_TOKEN in .env)
-	reverse_proxy ntfy:80 {
-		header_up Authorization "Bearer {$NTFY_TOKEN}"
-	}
-}
 
 share.{$LAB_DOMAIN} {
 	# no login screen: Gokapi signs in whoever this header names (stacks/gokapi/setup.sh)
@@ -114,10 +108,4 @@ http://:3001 {
 	reverse_proxy gokapi:53842 {
 		header_up -Remote-User
 	}
-}
-
-# ntfy for your phone: Tailscale Funnel sends https://<PUBLIC_DOMAIN>:10000 here (see
-# stacks/ntfy/compose.yaml). Not signed in: the app signs in itself.
-http://:3002 {
-	reverse_proxy ntfy:80
 }

@@ -94,12 +94,6 @@ pages:
                 url: https://share.${LAB_DOMAIN}
                 icon: sh:gokapi.png
                 category: tools
-              ntfy:
-                name: ntfy
-                description: push notifications to your phone
-                url: https://ntfy.${LAB_DOMAIN}
-                icon: di:ntfy.png
-                category: tools
               terminal:
                 name: Terminal
                 description: a shell on the server, in the browser
