@@ -296,6 +296,30 @@ if [ -d "$GOKAPI" ] && ! docker exec gokapi test -f /app/config/config.json 2>/d
 	fi
 fi
 
+# ntfy: one user your phone's ntfy app signs in as, and a token Caddy signs ntfy.lab in with
+if [ -d "$HOMELAB_DIR/stacks/ntfy" ]; then
+	i=0
+	until docker exec ntfy wget -q -O /dev/null http://localhost/v1/health 2>/dev/null; do
+		i=$((i + 1)); [ $i -le 30 ] || break; sleep 2
+	done
+	docker exec ntfy ntfy user list 2>&1 | grep -q '^user lab ' ||
+		docker exec -e NTFY_PASSWORD="$(sed -n 's/^NTFY_PASSWORD=//p' "$ENV_FILE")" ntfy \
+			ntfy user add --role=admin lab >/dev/null 2>&1 || true
+	if ! grep -q '^NTFY_TOKEN=tk_' "$ENV_FILE"; then
+		token=$(docker exec ntfy ntfy token add --label=caddy lab 2>&1 | grep -o 'tk_[a-z0-9]*' || true)
+		if [ -n "$token" ]; then
+			set_env NTFY_TOKEN "$token"
+			up "$HOMELAB_DIR/stacks/caddy" # it reads the token on start
+		fi
+	fi
+	if grep -q '^NTFY_TOKEN=tk_' "$ENV_FILE"; then
+		ok "ntfy.lab signs you in without a password"
+	else
+		echo " ✗ couldn't make the ntfy user. See why with:"
+		echo "   docker exec -e NTFY_PASSWORD=... ntfy ntfy user add --role=admin lab"
+	fi
+fi
+
 step "done"
 cat <<MSG
    Dashboard: https://home.$LAB
@@ -307,5 +331,7 @@ cat <<MSG
 
    To make share.lab's links work for people outside your Tailscale, run once:
    sudo tailscale funnel --bg --https=8443 3001
+   and so your phone's ntfy app can reach ntfy, also:
+   sudo tailscale funnel --bg --https=10000 3002
    (not plain --bg 3001: that takes port 443 and breaks every .$LAB site)
 MSG
