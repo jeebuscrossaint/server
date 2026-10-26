@@ -59,7 +59,6 @@ links, goes through Tailscale Funnel, which only lets downloads through).
 | `stats.lab` | Beszel: CPU, RAM, temps |
 | `pdf.lab` | BentoPDF: edit, merge, split, sign PDFs |
 | `convert.lab` | Transmute (file converter) |
-| `search.lab` | SearXNG |
 | `changes.lab` | changedetection.io |
 | `latex.lab` | Overleaf: LaTeX with autocomplete |
 | `keep.lab` | Readeck: bookmarks that keep a readable copy of the page |

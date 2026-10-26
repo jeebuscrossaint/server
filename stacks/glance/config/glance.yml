@@ -46,7 +46,6 @@ pages:
       - size: full
         widgets:
           - type: search
-            search-engine: https://search.${LAB_DOMAIN}/search?q={QUERY}
             autofocus: true
 
           - type: docker-containers
@@ -64,12 +63,6 @@ pages:
                 description: convert any file to any file
                 url: https://convert.${LAB_DOMAIN}
                 icon: sh:transmute
-                category: tools
-              searxng:
-                name: SearXNG
-                description: private search
-                url: https://search.${LAB_DOMAIN}
-                icon: di:searxng
                 category: tools
               changedetection:
                 name: Changedetection

@@ -43,10 +43,6 @@ convert.{$LAB_DOMAIN} {
 	reverse_proxy transmute:3313
 }
 
-search.{$LAB_DOMAIN} {
-	reverse_proxy searxng:8080
-}
-
 changes.{$LAB_DOMAIN} {
 	reverse_proxy changedetection:5000
 }
