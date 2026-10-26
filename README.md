@@ -53,20 +53,19 @@ links, goes through Tailscale Funnel and keeps its login page).
 
 | address | app |
 |---|---|
-| `home.lab` | Homepage dashboard |
+| `home.lab` | Glance dashboard |
 | `dockge.lab` | Dockge: start, stop and edit apps |
 | `logs.lab` | Dozzle: live logs for every app |
-| `top.lab` | Glances: btop in the browser |
 | `stats.lab` | Beszel: CPU, RAM, temps |
 | `pdf.lab` | BentoPDF: edit, merge, split, sign PDFs |
 | `convert.lab` | Transmute (file converter) |
 | `search.lab` | SearXNG |
 | `changes.lab` | changedetection.io |
 | `latex.lab` | Overleaf: LaTeX with autocomplete |
-| `keep.lab` | Karakeep: bookmarks that keep a copy of the page |
+| `keep.lab` | Readeck: bookmarks that keep a readable copy of the page |
 | `draw.lab` | ExcaliDash: Excalidraw that keeps all your drawings |
 | `share.lab` | Pingvin Share: upload a file, send anyone the link (public via Tailscale Funnel) |
-| `tools.lab` | IT-Tools: converters, encoders, QR codes and more |
+| `tools.lab` | OmniTools: image, video, PDF and text tools, converters and more |
 | `term.lab` | terminal on the server |
 
 Also running, with no page of its own: a **Tor Snowflake proxy** (`stacks/snowflake`)
@@ -91,7 +90,7 @@ dockge/          the app manager
 stacks/          one folder per app, and Dockge shows each one
   dns/           answers *.lab with this server's Tailscale IP
   caddy/         sends pdf.lab to BentoPDF, etc. (edit Caddyfile)
-  homepage/      the dashboard (edit config/services.yaml)
+  glance/        the dashboard (edit config/glance.yml)
   ...
 system/          server settings files that install.sh copies into /etc
 ```
@@ -109,5 +108,5 @@ App data lives in `stacks/*/data/`. To move to a new server, copy that folder an
    	reverse_proxy <container_name>:<port the app listens on>
    }
    ```
-3. Add a tile to `stacks/homepage/config/services.yaml`.
+3. Add a tile to `stacks/glance/config/glance.yml`.
 4. Run `sudo ./install.sh` again (or start it in Dockge and restart caddy).

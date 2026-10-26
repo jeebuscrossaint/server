@@ -9,10 +9,10 @@ services:
       - ${TAILSCALE_IP}:443:443
     environment:
       LAB_DOMAIN: ${LAB_DOMAIN}
-      TAILSCALE_IP: ${TAILSCALE_IP}
       OVERLEAF_PASSWORD: ${OVERLEAF_PASSWORD}
       PINGVIN_PASSWORD: ${PINGVIN_PASSWORD}
       TRANSMUTE_PASSWORD: ${TRANSMUTE_PASSWORD}
+      READECK_PASSWORD: ${READECK_PASSWORD}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./pages:/srv/pages:ro

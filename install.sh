@@ -283,6 +283,22 @@ if [ -d "$TRANSMUTE" ]; then
 	fi
 fi
 
+# Readeck: one user that keep.lab signs you in as (Caddy serves the sign-in page)
+if [ -d "$HOMELAB_DIR/stacks/readeck" ]; then
+	i=0
+	until docker exec readeck /bin/readeck healthcheck -config config.toml >/dev/null 2>&1; do
+		i=$((i + 1)); [ $i -le 30 ] || break; sleep 2
+	done
+	if out=$(docker exec -e READECK_PASSWORD="$(sed -n 's/^READECK_PASSWORD=//p' "$ENV_FILE")" readeck \
+		/bin/readeck user -config config.toml -u lab -email "lab@$LAB.local" -p env:READECK_PASSWORD 2>&1); then
+		# Readeck only notices its first user on start, until then it shows its setup page
+		case "$out" in *created*) docker restart readeck >/dev/null ;; esac
+		ok "keep.lab signs you in without a password"
+	else
+		echo " ✗ couldn't make the Readeck user: $out"
+	fi
+fi
+
 step "done"
 cat <<MSG
    Dashboard: https://home.$LAB

@@ -18,7 +18,7 @@ http://ca.{$LAB_DOMAIN} {
 }
 
 {$LAB_DOMAIN}, home.{$LAB_DOMAIN} {
-	reverse_proxy homepage:3000
+	reverse_proxy glance:8080
 }
 
 dockge.{$LAB_DOMAIN} {
@@ -81,11 +81,23 @@ stats.{$LAB_DOMAIN} {
 }
 
 keep.{$LAB_DOMAIN} {
-	reverse_proxy karakeep:3000
+	# no login screen: this page signs you in as the one user (see pages/keep-login.html)
+	@login {
+		method GET
+		path /login
+	}
+	handle @login {
+		root * /srv/pages
+		rewrite * /keep-login.html
+		header Cache-Control no-store
+		templates
+		file_server
+	}
+	reverse_proxy readeck:8000
 }
 
 tools.{$LAB_DOMAIN} {
-	reverse_proxy it-tools:80
+	reverse_proxy omni-tools:80
 }
 
 logs.{$LAB_DOMAIN} {
@@ -107,8 +119,4 @@ share.{$LAB_DOMAIN} {
 		file_server
 	}
 	reverse_proxy pingvin:3000
-}
-
-top.{$LAB_DOMAIN} {
-	reverse_proxy {$TAILSCALE_IP}:61208
 }

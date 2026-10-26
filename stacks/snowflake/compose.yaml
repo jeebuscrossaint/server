@@ -9,7 +9,7 @@ services:
     network_mode: host
     command: ["-summary-interval", "1h", "-metrics", "-metrics-address", "127.0.0.1"]
 
-  # reads Snowflake's counters, keeps all-time totals, serves them as JSON for Homepage
+  # reads Snowflake's counters, keeps all-time totals, serves them as JSON for Glance
   # on the Tailscale IP only (restarts until Tailscale is up at boot)
   snowflake-stats:
     image: busybox:latest

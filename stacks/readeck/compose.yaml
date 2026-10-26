@@ -1,0 +1,14 @@
+# Readeck: bookmarks that save a readable copy of the page, searchable. https://keep.lab
+# No login on keep.lab: install.sh makes one user (READECK_PASSWORD) and Caddy signs you in.
+services:
+  readeck:
+    image: codeberg.org/readeck/readeck:latest
+    container_name: readeck
+    restart: unless-stopped
+    volumes:
+      - ./data:/readeck
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

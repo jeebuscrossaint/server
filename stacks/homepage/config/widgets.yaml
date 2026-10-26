@@ -1,8 +1,0 @@
-- resources:
-    cpu: true
-    memory: true
-    disk: /
-- search:
-    provider: custom
-    url: https://search.{{HOMEPAGE_VAR_LAB_DOMAIN}}/search?q=
-    target: _blank

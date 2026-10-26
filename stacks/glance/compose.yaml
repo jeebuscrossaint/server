@@ -1,0 +1,18 @@
+# Glance: the dashboard. Edit config/glance.yml to add tiles; it reloads by itself.
+services:
+  glance:
+    image: glanceapp/glance:latest
+    container_name: glance
+    restart: unless-stopped
+    environment:
+      LAB_DOMAIN: ${LAB_DOMAIN}
+      TAILSCALE_IP: ${TAILSCALE_IP}
+    volumes:
+      - ./config:/app/config
+      # read-only, so tiles can show if each container is running
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

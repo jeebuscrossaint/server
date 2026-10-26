@@ -2,10 +2,4 @@
 !.env.example
 dockge/data/
 stacks/*/data/
-stacks/homepage/config/logs/
 stacks/terminal/theme/
-# blank starter files Homepage makes on first start (track one if you start using it)
-stacks/homepage/config/custom.css
-stacks/homepage/config/custom.js
-stacks/homepage/config/kubernetes.yaml
-stacks/homepage/config/proxmox.yaml

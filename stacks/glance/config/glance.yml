@@ -1,0 +1,143 @@
+# Each tile is a container: url is where clicking goes, and the dot shows running/stopped.
+# Icons: di: is dashboard-icons, sh: is selfh.st icons, mdi: is Material Design Icons.
+theme: # Catppuccin Mocha
+  background-color: 240 21 15
+  contrast-multiplier: 1.2
+  primary-color: 217 92 83
+  positive-color: 115 54 76
+  negative-color: 347 70 65
+
+pages:
+  - name: Home
+    columns:
+      - size: small
+        widgets:
+          - type: server-stats
+            servers:
+              - type: local
+                name: server
+                hide-mountpoints-by-default: true
+                mountpoints:
+                  "/":
+                    name: disk
+                    hide: false
+
+          - type: custom-api
+            title: Snowflake
+            cache: 1m
+            url: http://${TAILSCALE_IP}:9998/stats.json
+            template: |
+              <p class="size-h6 margin-bottom-10">helping people in censored countries reach Tor</p>
+              <div class="flex justify-between text-center">
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.Int "helped" | formatNumber }}</div>
+                  <div class="size-h6">HELPED</div>
+                </div>
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.Int "relayed_mb" | formatNumber }}</div>
+                  <div class="size-h6">MB RELAYED</div>
+                </div>
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.String "top_country" }}</div>
+                  <div class="size-h6">MOST FROM</div>
+                </div>
+              </div>
+
+      - size: full
+        widgets:
+          - type: search
+            search-engine: https://search.${LAB_DOMAIN}/search?q={QUERY}
+            autofocus: true
+
+          - type: docker-containers
+            title: Tools
+            category: tools
+            containers: &containers
+              bentopdf:
+                name: BentoPDF
+                description: edit, merge, split, sign PDFs
+                url: https://pdf.${LAB_DOMAIN}
+                icon: di:bentopdf
+                category: tools
+              transmute:
+                name: Transmute
+                description: convert any file to any file
+                url: https://convert.${LAB_DOMAIN}
+                icon: sh:transmute
+                category: tools
+              searxng:
+                name: SearXNG
+                description: private search
+                url: https://search.${LAB_DOMAIN}
+                icon: di:searxng
+                category: tools
+              changedetection:
+                name: Changedetection
+                description: get pinged when a website changes
+                url: https://changes.${LAB_DOMAIN}
+                icon: di:changedetection
+                category: tools
+              excalidash:
+                name: ExcaliDash
+                description: whiteboard, keeps all your drawings
+                url: https://draw.${LAB_DOMAIN}
+                icon: di:excalidraw
+                category: tools
+              overleaf:
+                name: Overleaf
+                description: LaTeX with autocomplete
+                url: https://latex.${LAB_DOMAIN}
+                icon: di:overleaf
+                category: tools
+              readeck:
+                name: Readeck
+                description: bookmarks with saved copies, searchable
+                url: https://keep.${LAB_DOMAIN}
+                icon: di:readeck
+                category: tools
+              pingvin:
+                name: Pingvin Share
+                description: upload a file, send anyone the link
+                url: https://share.${LAB_DOMAIN}
+                icon: sh:pingvin-share-x
+                category: tools
+              omni-tools:
+                name: OmniTools
+                description: images, video, PDFs, text, converters
+                url: https://tools.${LAB_DOMAIN}
+                icon: sh:omnitools
+                category: tools
+              terminal:
+                name: Terminal
+                description: a shell on the server, in the browser
+                url: https://term.${LAB_DOMAIN}
+                icon: mdi:console
+                category: system
+              dockge:
+                name: Dockge
+                description: start, stop, edit stacks
+                url: https://dockge.${LAB_DOMAIN}
+                icon: di:dockge
+                category: system
+              dozzle:
+                name: Dozzle
+                description: live logs for every app
+                url: https://logs.${LAB_DOMAIN}
+                icon: di:dozzle
+                category: system
+              beszel:
+                name: Beszel
+                description: CPU, RAM, temps, containers
+                url: https://stats.${LAB_DOMAIN}
+                icon: di:beszel
+                category: system
+              snowflake:
+                name: Snowflake
+                description: Tor proxy for censored countries
+                icon: di:tor
+                category: system
+
+          - type: docker-containers
+            title: System
+            category: system
+            containers: *containers

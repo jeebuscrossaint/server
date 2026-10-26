@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- Caddy shows this instead of Readeck's login page and signs you in as the one user.
+     install.sh makes that user with READECK_PASSWORD. -->
+<meta charset="utf-8">
+<title>Readeck</title>
+<body style="background:#fff;font:16px sans-serif;padding:2em">
+<p id="msg">Signing in…</p>
+<script>
+(async () => {
+	try {
+		const res = await fetch('/login', {
+			method: 'POST',
+			body: new URLSearchParams({
+				username: 'lab',
+				password: '{{env "READECK_PASSWORD"}}',
+				r: new URLSearchParams(location.search).get('r') || '',
+			}),
+		})
+		// signed in: Readeck redirects to the page you wanted; otherwise it shows its login form again
+		if (!res.ok || new URL(res.url).pathname === '/login') throw new Error(res.status)
+		location.replace(res.url)
+	} catch (err) {
+		document.getElementById('msg').textContent =
+			"Couldn't sign in (" + err.message + '). Run sudo ./install.sh on the server to make the Readeck user.'
+	}
+})()
+</script>
