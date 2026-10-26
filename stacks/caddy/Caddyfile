@@ -96,10 +96,6 @@ tools.{$LAB_DOMAIN} {
 	reverse_proxy omni-tools:80
 }
 
-logs.{$LAB_DOMAIN} {
-	reverse_proxy dozzle:8080
-}
-
 share.{$LAB_DOMAIN} {
 	# no login screen: Gokapi signs in whoever this header names (stacks/gokapi/setup.sh)
 	reverse_proxy gokapi:53842 {

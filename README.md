@@ -55,7 +55,6 @@ links, goes through Tailscale Funnel, which only lets downloads through).
 |---|---|
 | `home.lab` | Glance dashboard |
 | `dockge.lab` | Dockge: start, stop and edit apps |
-| `logs.lab` | Dozzle: live logs for every app |
 | `stats.lab` | Beszel: CPU, RAM, temps |
 | `pdf.lab` | BentoPDF: edit, merge, split, sign PDFs |
 | `convert.lab` | Transmute (file converter) |

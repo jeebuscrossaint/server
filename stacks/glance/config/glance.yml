@@ -112,12 +112,6 @@ pages:
                 url: https://dockge.${LAB_DOMAIN}
                 icon: di:dockge
                 category: system
-              dozzle:
-                name: Dozzle
-                description: live logs for every app
-                url: https://logs.${LAB_DOMAIN}
-                icon: di:dozzle
-                category: system
               beszel:
                 name: Beszel
                 description: CPU, RAM, temps, containers
