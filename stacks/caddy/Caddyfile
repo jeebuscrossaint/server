@@ -105,18 +105,18 @@ logs.{$LAB_DOMAIN} {
 }
 
 share.{$LAB_DOMAIN} {
-	# no login screen: opening a page while signed out signs you in (pages/share-login.html).
-	# Only here; the public Funnel address skips Caddy and keeps Pingvin's login.
-	@login {
-		header Sec-Fetch-Dest document
-		not header Cookie *access_token=*
+	# no login screen: Gokapi signs in whoever this header names (stacks/gokapi/setup.sh)
+	reverse_proxy gokapi:53842 {
+		header_up Remote-User lab
 	}
-	handle @login {
-		root * /srv/pages
-		rewrite * /share-login.html
-		header Cache-Control no-store
-		templates
-		file_server
+}
+
+# Gokapi's public links: Tailscale Funnel sends https://<PUBLIC_DOMAIN>:8443 here (see
+# stacks/gokapi/compose.yaml). Never signed in, and the admin pages aren't reachable.
+http://:3001 {
+	@admin path /admin /apiKeys /auth/* /changePassword /downloadPresigned /e2eSetup /filerequests /forgotpw /index /login /logout /logs /uploadChunk /uploadStatus /users
+	respond @admin 404
+	reverse_proxy gokapi:53842 {
+		header_up -Remote-User
 	}
-	reverse_proxy pingvin:3000
 }

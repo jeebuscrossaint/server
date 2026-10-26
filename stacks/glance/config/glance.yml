@@ -95,11 +95,11 @@ pages:
                 url: https://keep.${LAB_DOMAIN}
                 icon: di:readeck
                 category: tools
-              pingvin:
-                name: Pingvin Share
+              gokapi:
+                name: Gokapi
                 description: upload a file, send anyone the link
                 url: https://share.${LAB_DOMAIN}
-                icon: sh:pingvin-share-x
+                icon: sh:gokapi
                 category: tools
               omni-tools:
                 name: OmniTools

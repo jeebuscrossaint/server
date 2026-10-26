@@ -49,7 +49,7 @@ A new server makes a new certificate, so you'd do this again after moving.
 
 None of them ask you to log in. That's fine because they only listen on the Tailscale
 IP, never the Wi-Fi/LAN the server sits on (the one exception, `share.lab`'s public
-links, goes through Tailscale Funnel and keeps its login page).
+links, goes through Tailscale Funnel, which only lets downloads through).
 
 | address | app |
 |---|---|
@@ -64,7 +64,7 @@ links, goes through Tailscale Funnel and keeps its login page).
 | `latex.lab` | Overleaf: LaTeX with autocomplete |
 | `keep.lab` | Readeck: bookmarks that keep a readable copy of the page |
 | `draw.lab` | ExcaliDash: Excalidraw that keeps all your drawings |
-| `share.lab` | Pingvin Share: upload a file, send anyone the link (public via Tailscale Funnel) |
+| `share.lab` | Gokapi: upload a file, send anyone the link (public via Tailscale Funnel) |
 | `tools.lab` | OmniTools: image, video, PDF and text tools, converters and more |
 | `term.lab` | terminal on the server |
 

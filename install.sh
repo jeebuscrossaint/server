@@ -110,25 +110,6 @@ chown "$(stat -c %u:%g "$HOMELAB_DIR")" "$ENV_FILE"
 LAB=$(sed -n 's/^LAB_DOMAIN=//p' "$ENV_FILE")
 ok "apps will be at *.$LAB"
 
-# Pingvin Share's config file can't read .env, so fill in its settings here
-PINGVIN="$HOMELAB_DIR/stacks/pingvin"
-if [ -d "$PINGVIN" ]; then
-	mkdir -p "$PINGVIN/data"
-	sed -e "s|{PUBLIC_DOMAIN}|$(sed -n 's/^PUBLIC_DOMAIN=//p' "$ENV_FILE")|" \
-		-e "s|{LAB_DOMAIN}|$LAB|" \
-		-e "s|{PINGVIN_PASSWORD}|$(sed -n 's/^PINGVIN_PASSWORD=//p' "$ENV_FILE")|" \
-		"$PINGVIN/config.yaml" > "$PINGVIN/data/config.new"
-	chmod 600 "$PINGVIN/data/config.new"
-	chown "$(stat -c %u:%g "$HOMELAB_DIR")" "$PINGVIN/data" "$PINGVIN/data/config.new"
-	if cmp -s "$PINGVIN/data/config.new" "$PINGVIN/data/config.yaml"; then
-		rm "$PINGVIN/data/config.new"
-	else
-		mv "$PINGVIN/data/config.new" "$PINGVIN/data/config.yaml"
-		docker rm -f pingvin >/dev/null 2>&1 || true # it only reads the file on start
-	fi
-	ok "Pingvin Share settings written"
-fi
-
 step "server settings"
 # Docker: cap each app's logs, and keep apps running while Docker itself restarts
 mkdir -p /etc/docker
@@ -299,6 +280,22 @@ if [ -d "$HOMELAB_DIR/stacks/readeck" ]; then
 	fi
 fi
 
+# Gokapi: fill in its first-start setup page (Caddy signs you in on share.lab)
+GOKAPI="$HOMELAB_DIR/stacks/gokapi"
+if [ -d "$GOKAPI" ] && ! docker exec gokapi test -f /app/config/config.json 2>/dev/null; then
+	i=0
+	until docker exec gokapi curl -fs -o /dev/null http://127.0.0.1:53842/setup/ 2>/dev/null; do
+		i=$((i + 1)); [ $i -le 30 ] || break; sleep 2
+	done
+	if docker exec -i -e PUBLIC_DOMAIN="$(sed -n 's/^PUBLIC_DOMAIN=//p' "$ENV_FILE")" \
+		gokapi sh -s < "$GOKAPI/setup.sh" >/dev/null 2>&1; then
+		ok "share.lab is set up"
+	else
+		echo " ✗ couldn't set up Gokapi. See why with:"
+		echo "   docker exec -i -e PUBLIC_DOMAIN=... gokapi sh -s < $GOKAPI/setup.sh"
+	fi
+fi
+
 step "done"
 cat <<MSG
    Dashboard: https://home.$LAB
@@ -308,7 +305,7 @@ cat <<MSG
    Tailscale admin > DNS > Add nameserver > Custom > $TS_IP
    then turn on "Restrict to domain" and type: $LAB
 
-   To make Pingvin Share's links work for people outside your Tailscale, run once:
+   To make share.lab's links work for people outside your Tailscale, run once:
    sudo tailscale funnel --bg --https=8443 3001
    (not plain --bg 3001: that takes port 443 and breaks every .$LAB site)
 MSG

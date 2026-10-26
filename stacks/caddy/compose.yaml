@@ -7,10 +7,10 @@ services:
     ports: # Tailscale only, not the Wi-Fi/LAN (see system/sysctl-tailscale-bind.conf)
       - ${TAILSCALE_IP}:80:80
       - ${TAILSCALE_IP}:443:443
+      - 127.0.0.1:3001:3001 # Gokapi's public links, only for Funnel
     environment:
       LAB_DOMAIN: ${LAB_DOMAIN}
       OVERLEAF_PASSWORD: ${OVERLEAF_PASSWORD}
-      PINGVIN_PASSWORD: ${PINGVIN_PASSWORD}
       TRANSMUTE_PASSWORD: ${TRANSMUTE_PASSWORD}
       READECK_PASSWORD: ${READECK_PASSWORD}
     volumes:

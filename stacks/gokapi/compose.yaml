@@ -1,0 +1,22 @@
+# Gokapi: upload files at https://share.lab, send anyone the link. Links expire after
+# a number of days or downloads. No login on share.lab: Caddy tells Gokapi who you are.
+# Public links work for people NOT on your Tailscale through Tailscale Funnel, which
+# forwards https://<PUBLIC_DOMAIN>:8443 to Caddy on 127.0.0.1:3001, and Caddy lets only
+# downloads through (see Caddyfile). Turn it on once with:
+#   sudo tailscale funnel --bg --https=8443 3001
+# NOT on the default port 443: Funnel would take over 443 on the Tailscale IP and
+# break every .lab site, since Caddy serves those on 443.
+# First start shows a setup page; install.sh fills it in with setup.sh.
+services:
+  gokapi:
+    image: f0rc3/gokapi:latest
+    container_name: gokapi
+    restart: unless-stopped
+    volumes:
+      - ./data/data:/app/data
+      - ./data/config:/app/config
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true
