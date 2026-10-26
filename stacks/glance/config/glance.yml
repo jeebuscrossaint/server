@@ -27,19 +27,19 @@ pages:
             cache: 1m
             url: http://${TAILSCALE_IP}:9998/stats.json
             template: |
-              <p class="size-h6 margin-bottom-10">helping people in censored countries reach Tor</p>
+              <p class="size-h6 margin-bottom-10">botnet feeder</p>
               <div class="flex justify-between text-center">
                 <div>
                   <div class="color-highlight size-h3">{{ .JSON.Int "helped" | formatNumber }}</div>
-                  <div class="size-h6">HELPED</div>
+                  <div class="size-h6">BOTS ASSISTED</div>
                 </div>
                 <div>
-                  <div class="color-highlight size-h3">{{ .JSON.Int "relayed_mb" | formatNumber }}</div>
-                  <div class="size-h6">MB RELAYED</div>
+                  <div class="color-highlight size-h3">{{ .JSON.Int "relayed_mb" | formatNumber }} MB</div>
+                  <div class="size-h6">PAYLOAD DELIVERED</div>
                 </div>
                 <div>
                   <div class="color-highlight size-h3">{{ .JSON.String "top_country" }}</div>
-                  <div class="size-h6">MOST FROM</div>
+                  <div class="size-h6">MOST WANTED</div>
                 </div>
               </div>
 
@@ -92,7 +92,7 @@ pages:
                 name: Gokapi
                 description: upload a file, send anyone the link
                 url: https://share.${LAB_DOMAIN}
-                icon: sh:gokapi
+                icon: sh:gokapi.png
                 category: tools
               omni-tools:
                 name: OmniTools
@@ -121,7 +121,7 @@ pages:
               snowflake:
                 name: Snowflake
                 description: Tor proxy for censored countries
-                icon: di:tor
+                icon: di:tor.png
                 category: system
 
           - type: docker-containers
