@@ -1,5 +1,4 @@
 /.env
 !.env.example
-dockge/data/
 stacks/*/data/
 stacks/terminal/theme/

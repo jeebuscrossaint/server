@@ -64,12 +64,6 @@ pages:
                 url: https://convert.${LAB_DOMAIN}
                 icon: sh:transmute
                 category: tools
-              changedetection:
-                name: Changedetection
-                description: get pinged when a website changes
-                url: https://changes.${LAB_DOMAIN}
-                icon: di:changedetection
-                category: tools
               excalidash:
                 name: ExcaliDash
                 description: whiteboard, keeps all your drawings
@@ -99,12 +93,6 @@ pages:
                 description: a shell on the server, in the browser
                 url: https://term.${LAB_DOMAIN}
                 icon: mdi:console
-                category: system
-              dockge:
-                name: Dockge
-                description: start, stop, edit stacks
-                url: https://dockge.${LAB_DOMAIN}
-                icon: di:dockge
                 category: system
               beszel:
                 name: Beszel

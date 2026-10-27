@@ -180,7 +180,6 @@ up() {
 	done
 	echo " ✗ $name didn't start. See why with: cd $1 && docker compose up"
 }
-up "$HOMELAB_DIR/dockge"
 up "$HOMELAB_DIR/stacks/dns"
 up "$HOMELAB_DIR/stacks/caddy"
 for dir in "$HOMELAB_DIR"/stacks/*/; do
@@ -237,15 +236,6 @@ if [ -d "$OVERLEAF" ]; then
 		echo " ✗ couldn't make the Overleaf user. See why with:"
 		echo "   docker exec -i -w /overleaf/services/web overleaf node --input-type=module < $OVERLEAF/make-user.mjs"
 	fi
-fi
-
-# Dockge: one user, then its login screen turned off
-if docker exec -i -w /app -e DOCKGE_PASSWORD="$(sed -n 's/^DOCKGE_PASSWORD=//p' "$ENV_FILE")" \
-	dockge node - < "$HOMELAB_DIR/dockge/setup.js" >/dev/null 2>&1; then
-	ok "dockge.lab has no login screen"
-else
-	echo " ✗ couldn't set up Dockge's user. See why with:"
-	echo "   docker exec -i -w /app dockge node - < $HOMELAB_DIR/dockge/setup.js"
 fi
 
 # Transmute: one user that convert.lab signs you in as (Caddy serves the sign-in page)

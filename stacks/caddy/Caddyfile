@@ -1,5 +1,5 @@
 # One block per app: <name>.{$LAB_DOMAIN} -> <container name>:<port inside container>
-# After editing, restart the caddy stack in Dockge.
+# After editing, restart caddy: cd stacks/caddy && docker compose restart
 #
 # HTTPS uses Caddy's own certificate authority. Each device trusts it once:
 # download http://ca.lab and install it (see README).
@@ -21,10 +21,6 @@ http://ca.{$LAB_DOMAIN} {
 	reverse_proxy glance:8080
 }
 
-dockge.{$LAB_DOMAIN} {
-	reverse_proxy dockge:5001
-}
-
 pdf.{$LAB_DOMAIN} {
 	reverse_proxy bentopdf:8080
 }
@@ -41,10 +37,6 @@ convert.{$LAB_DOMAIN} {
 		file_server
 	}
 	reverse_proxy transmute:3313
-}
-
-changes.{$LAB_DOMAIN} {
-	reverse_proxy changedetection:5000
 }
 
 term.{$LAB_DOMAIN} {

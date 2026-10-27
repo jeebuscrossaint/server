@@ -54,11 +54,9 @@ links, goes through Tailscale Funnel, which only lets downloads through).
 | address | app |
 |---|---|
 | `home.lab` | Glance dashboard |
-| `dockge.lab` | Dockge: start, stop and edit apps |
 | `stats.lab` | Beszel: CPU, RAM, temps |
 | `pdf.lab` | BentoPDF: edit, merge, split, sign PDFs |
 | `convert.lab` | Transmute (file converter) |
-| `changes.lab` | changedetection.io |
 | `latex.lab` | Overleaf: LaTeX with autocomplete |
 | `keep.lab` | Readeck: bookmarks that keep a readable copy of the page |
 | `draw.lab` | ExcaliDash: Excalidraw that keeps all your drawings |
@@ -83,8 +81,7 @@ doesn't come back on Tailscale after a kexec (Wi-Fi sometimes doesn't), do a nor
 ```
 install.sh       sets up a server from scratch
 .env             settings (made by install.sh, not in git)
-dockge/          the app manager
-stacks/          one folder per app, and Dockge shows each one
+stacks/          one folder per app
   dns/           answers *.lab with this server's Tailscale IP
   caddy/         sends pdf.lab to BentoPDF, etc. (edit Caddyfile)
   glance/        the dashboard (edit config/glance.yml)
@@ -106,4 +103,4 @@ App data lives in `stacks/*/data/`. To move to a new server, copy that folder an
    }
    ```
 3. Add a tile to `stacks/glance/config/glance.yml`.
-4. Run `sudo ./install.sh` again (or start it in Dockge and restart caddy).
+4. Run `sudo ./install.sh` again.
