@@ -170,7 +170,8 @@ up() {
 	for try in 1 2 3 4 5 6 7 8; do
 		if (
 			cd "$1"
-			if [ "$PULL" = yes ]; then docker compose pull --quiet; fi
+			# --ignore-buildable: terminal is built here, not on Docker Hub
+			if [ "$PULL" = yes ]; then docker compose pull --quiet --ignore-buildable; fi
 			if [ "$RECREATE" = yes ]; then set -- --force-recreate; else set --; fi
 			docker compose up -d --build --quiet-pull --remove-orphans "$@" >/dev/null 2>&1
 		); then
