@@ -18,7 +18,8 @@ while true; do
 		if [ "$c" -lt "$lc" ] || [ "$i" -lt "$li" ]; then
 			bc=$((bc + lc)); bi=$((bi + li)); bo=$((bo + lo))
 		fi
-		echo "$bc $bi $bo $c $i $o" > "$S"
+		# write then rename, so a power cut mid-write can't wipe the totals
+		echo "$bc $bi $bo $c $i $o" > "$S.tmp" && mv "$S.tmp" "$S"
 		# the traffic counters are in KB (1000 bytes), not bytes. They're separate
 		# directions (out: from users, in: back to users), so the total is both
 		printf '{"helped":%s,"relayed_mb":%s,"top_country":"%s"}\n' \

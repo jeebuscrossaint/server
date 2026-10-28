@@ -34,4 +34,5 @@ while :; do
 	while kill -0 $pid 2>/dev/null && [ "$(cksum "$f" 2>/dev/null)" = "$sum" ]; do sleep 2; done
 	kill $pid 2>/dev/null
 	wait $pid
+	sleep 1 # if ttyd keeps failing to start, don't spin the CPU
 done

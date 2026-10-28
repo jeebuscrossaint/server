@@ -22,7 +22,8 @@ while true; do
 		read -r bt lt < "$S"
 		# smaller than last time means i2pd restarted: bank the old total
 		if [ "$t" -lt "$lt" ]; then bt=$((bt + lt)); fi
-		echo "$bt $t" > "$S"
+		# write then rename, so a power cut mid-write can't wipe the totals
+		echo "$bt $t" > "$S.tmp" && mv "$S.tmp" "$S"
 		printf '{"tunnels":%s,"transit_mb":%s,"status":"%s"}\n' \
 			"${n:-0}" $(((bt + t) / 1048576)) "${st:--}" > /www/stats.json.tmp
 		mv /www/stats.json.tmp /www/stats.json
