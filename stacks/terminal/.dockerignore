@@ -1,3 +1,0 @@
-# the build only needs start.sh; data/ holds the SSH key
-data
-theme

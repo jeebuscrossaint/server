@@ -170,7 +170,7 @@ up() {
 	for try in 1 2 3 4 5 6 7 8; do
 		if (
 			cd "$1"
-			# --ignore-buildable: terminal is built here, not on Docker Hub
+			# --ignore-buildable: skip apps built here rather than downloaded
 			if [ "$PULL" = yes ]; then docker compose pull --quiet --ignore-buildable; fi
 			if [ "$RECREATE" = yes ]; then set -- --force-recreate; else set --; fi
 			docker compose up -d --build --quiet-pull --remove-orphans "$@" >/dev/null 2>&1
@@ -189,25 +189,38 @@ for dir in "$HOMELAB_DIR"/stacks/*/; do
 	if [ -f "$dir/compose.yaml" ]; then up "$dir"; fi
 done
 
-# term.lab logs in with its own SSH key, so there's no password prompt.
+# term.lab (Nexterm) SSHes into the server with its own key, so there's no password prompt.
 # The key only works from Docker's network (from=), not from anywhere else.
-TERM_KEY="$HOMELAB_DIR/stacks/terminal/data/id_ed25519"
-if [ -n "$ME" ] && [ -d "$HOMELAB_DIR/stacks/terminal" ]; then
+NEXTERM="$HOMELAB_DIR/stacks/nexterm"
+TERM_KEY="$NEXTERM/data/id_ed25519"
+if [ -n "$ME" ] && [ -d "$NEXTERM" ]; then
 	mkdir -p "$(dirname "$TERM_KEY")"
-	[ -f "$TERM_KEY" ] || ssh-keygen -q -t ed25519 -N "" -C homelab-terminal -f "$TERM_KEY"
+	[ -f "$TERM_KEY" ] || ssh-keygen -q -t ed25519 -N "" -C homelab-nexterm -f "$TERM_KEY"
 	HOME_DIR=$(getent passwd "$ME" | cut -d: -f6)
 	AUTH="$HOME_DIR/.ssh/authorized_keys"
 	mkdir -p "$HOME_DIR/.ssh"
-	if ! grep -q homelab-terminal "$AUTH" 2>/dev/null; then
+	touch "$AUTH"
+	# the old ttyd terminal's key, no longer used
+	sed -i '/ homelab-terminal$/d' "$AUTH"
+	if ! grep -q homelab-nexterm "$AUTH"; then
 		printf 'from="172.16.0.0/12" %s\n' "$(cat "$TERM_KEY.pub")" >> "$AUTH"
 	fi
 	chown -R "$ME:" "$HOME_DIR/.ssh"
 	chmod 700 "$HOME_DIR/.ssh"
 	chmod 600 "$AUTH"
-	# where coat drops term.lab's colors (over ssh, as you, so it must be yours)
-	mkdir -p "$HOMELAB_DIR/stacks/terminal/theme"
-	chown "$ME:" "$HOMELAB_DIR/stacks/terminal/theme"
-	ok "term.lab logs you in without a password"
+	# one user that term.lab signs you in as, with this server already added
+	i=0
+	until docker exec nexterm node -e "fetch('http://127.0.0.1:6989/api/service/version').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))" 2>/dev/null; do
+		i=$((i + 1)); [ $i -le 30 ] || break; sleep 2
+	done
+	if docker exec -i -e NEXTERM_PASSWORD="$(sed -n 's/^NEXTERM_PASSWORD=//p' "$ENV_FILE")" \
+		-e SERVER_USER="$ME" -e SSH_KEY="$(cat "$TERM_KEY")" \
+		nexterm node --input-type=module < "$NEXTERM/setup.mjs" >/dev/null 2>&1; then
+		ok "term.lab signs you in without a password"
+	else
+		echo " ✗ couldn't set up Nexterm. See why with:"
+		echo "   docker exec -i -e NEXTERM_PASSWORD=... -e SERVER_USER=$ME -e SSH_KEY=... nexterm node --input-type=module < $NEXTERM/setup.mjs"
+	fi
 fi
 
 # Beszel's agent needs the hub's public key, which the hub only makes on its first start

@@ -61,7 +61,7 @@ links, goes through Tailscale Funnel, which only lets downloads through).
 | `keep.lab` | Readeck: bookmarks that keep a readable copy of the page |
 | `draw.lab` | ExcaliDash: Excalidraw that keeps all your drawings |
 | `share.lab` | Gokapi: upload a file, send anyone the link (public via Tailscale Funnel) |
-| `term.lab` | terminal on the server |
+| `term.lab` | Nexterm: terminal on the server, with tabs, split panes and files |
 
 Also running, with no page of its own: a **Tor Snowflake proxy** (`stacks/snowflake`)
 that helps people in censored countries reach Tor.

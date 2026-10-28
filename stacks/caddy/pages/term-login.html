@@ -1,0 +1,33 @@
+<!doctype html>
+<!-- Caddy shows this on term.lab until you're signed in, and signs you in as the one
+     user. Nexterm keeps its token in the browser, where Caddy can't see it, so this
+     also sets a cookie that tells Caddy you're signed in. install.sh makes the user. -->
+<meta charset="utf-8">
+<title>Nexterm</title>
+<body style="background:#fff;font:16px sans-serif;padding:2em">
+<p id="msg">Signing in…</p>
+<script>
+(async () => {
+	try {
+		// Nexterm's sessions don't run out, so keep the one this browser has if it still works
+		const old = localStorage.getItem('sessionToken')
+		const me = old && await fetch('/api/accounts/me', { headers: { Authorization: 'Bearer ' + old } })
+		if (!me || !me.ok) {
+			const res = await fetch('/api/auth/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ username: 'lab', password: '{{env "NEXTERM_PASSWORD"}}' }),
+			})
+			const body = await res.json().catch(() => ({}))
+			if (!body.token) throw new Error(body.message || res.status)
+			localStorage.setItem('sessionToken', body.token)
+		}
+		// checked again once a day, so a sign-out in Nexterm fixes itself by tomorrow
+		document.cookie = 'term_auto=1; path=/; max-age=86400; secure; samesite=lax'
+		location.replace(location.href)
+	} catch (err) {
+		document.getElementById('msg').textContent =
+			"Couldn't sign in (" + err.message + '). Run sudo ./install.sh on the server to make the Nexterm user.'
+	}
+})()
+</script>

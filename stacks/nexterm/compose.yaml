@@ -1,0 +1,21 @@
+# Nexterm: terminal on the server in the browser, with tabs, split panes, a file browser
+# and snippets. https://term.lab, no login: install.sh makes one user (NEXTERM_PASSWORD)
+# and Caddy's term.lab page signs you in as it. setup.mjs adds this server, which Nexterm
+# reaches over SSH with its own key (data/id_ed25519), locked to Docker's network.
+services:
+  nexterm:
+    image: nexterm/aio:latest
+    container_name: nexterm
+    restart: unless-stopped
+    environment:
+      ENCRYPTION_KEY: ${NEXTERM_KEY} # encrypts saved keys; changing it loses them
+      TRUST_PROXY: "1"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./data:/app/data
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

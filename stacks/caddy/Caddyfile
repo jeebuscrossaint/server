@@ -40,7 +40,16 @@ convert.{$LAB_DOMAIN} {
 }
 
 term.{$LAB_DOMAIN} {
-	reverse_proxy terminal:7681
+	# no login screen: signs you in until the term_auto cookie says you are (pages/term-login.html)
+	@login expression `header({'Sec-Fetch-Dest': 'document'}) && !header_regexp('Cookie', 'term_auto=1')`
+	handle @login {
+		root * /srv/pages
+		rewrite * /term-login.html
+		header Cache-Control no-store
+		templates
+		file_server
+	}
+	reverse_proxy nexterm:6989
 }
 
 draw.{$LAB_DOMAIN} {

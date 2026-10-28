@@ -109,8 +109,8 @@ pages:
                 url: https://share.${LAB_DOMAIN}
                 icon: sh:gokapi.png
                 category: tools
-              terminal:
-                name: Terminal
+              nexterm:
+                name: Nexterm
                 description: a shell on the server, in the browser
                 url: https://term.${LAB_DOMAIN}
                 icon: mdi:console
