@@ -19,10 +19,10 @@ while true; do
 			bc=$((bc + lc)); bi=$((bi + li)); bo=$((bo + lo))
 		fi
 		echo "$bc $bi $bo $c $i $o" > "$S"
-		# the traffic counters are in KB (1000 bytes), not bytes. Every relayed byte is
-		# counted once coming in and once going out, so count only what went out
+		# the traffic counters are in KB (1000 bytes), not bytes. They're separate
+		# directions (out: from users, in: back to users), so the total is both
 		printf '{"helped":%s,"relayed_mb":%s,"top_country":"%s"}\n' \
-			$((bc + c)) $(((bo + o) * 1000 / 1048576)) "$top" > /www/stats.json.tmp
+			$((bc + c)) $(((bi + i + bo + o) * 1000 / 1048576)) "$top" > /www/stats.json.tmp
 		mv /www/stats.json.tmp /www/stats.json
 	fi
 	sleep 60
