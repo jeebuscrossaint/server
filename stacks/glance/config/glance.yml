@@ -43,6 +43,27 @@ pages:
                 </div>
               </div>
 
+          - type: custom-api
+            title: I2P
+            cache: 1m
+            url: http://${TAILSCALE_IP}:9997/stats.json
+            template: |
+              <p class="size-h6 margin-bottom-10">garlic smuggler</p>
+              <div class="flex justify-between text-center">
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.Int "tunnels" | formatNumber }}</div>
+                  <div class="size-h6">TUNNELS DUG</div>
+                </div>
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.Int "transit_mb" | formatNumber }} MB</div>
+                  <div class="size-h6">CONTRABAND MOVED</div>
+                </div>
+                <div>
+                  <div class="color-highlight size-h3">{{ .JSON.String "status" }}</div>
+                  <div class="size-h6">COVER</div>
+                </div>
+              </div>
+
       - size: full
         widgets:
           - type: search

@@ -1,0 +1,16 @@
+# Stats for the i2pd router already running on the server (not started from here).
+# The dashboard tile reads its web console on localhost:7070 through i2p-stats below.
+services:
+  # reads the web console, keeps all-time totals, serves them as JSON for Glance
+  # on the Tailscale IP only (restarts until Tailscale is up at boot)
+  i2p-stats:
+    image: busybox:latest
+    container_name: i2p-stats
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      LISTEN: ${TAILSCALE_IP}:9997
+    command: ["sh", "/stats.sh"]
+    volumes:
+      - ./stats.sh:/stats.sh:ro
+      - ./data:/data
